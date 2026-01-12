@@ -100,3 +100,39 @@ Special shoutout to the **[LightRAG](https://github.com/HKUDS/LightRAG)** projec
 
 ---
 Developed as part of the Traffic Legal Assistant project.
+
+
+
+
+---------------------------
+Pull model DeepSeek R1 trong container ollama
+Chạy:
+docker compose up -d ollama
+docker exec -it ollama ollama pull deepseek-r1
+docker exec -it ollama ollama pull nomic-embed-text
+
+docker compose up -d ollama
+docker compose exec ollama ollama pull deepseek-r1:1.5b
+docker compose exec ollama ollama pull nomic-embed-text
+docker compose exec ollama ollama list
+
+
+
+
+docker compose up -d ollama
+docker exec -it ollama ollama list
+docker exec -it ollama ollama pull deepseek-r1: 1.5b
+docker exec -it ollama ollama pull nomic-embed-text
+
+
+pull model vào Ollama container.
+docker exec -it ollama ollama pull deepseek-r1:1.5b
+docker exec -it ollama ollama pull nomic-embed-text
+
+docker compose down
+docker compose up -d
+docker compose logs -f litellm
+
+
+docker restart ollama
+docker exec -it ollama ollama list
