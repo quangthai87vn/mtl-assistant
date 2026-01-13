@@ -106,39 +106,71 @@ Developed as part of the Traffic Legal Assistant project.
 
 ---------------------------
 TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
-------Xoa toan bo------
-docker rm -f $(docker ps -aq) 2>/dev/null
-docker rmi -f $(docker images -aq) 2>/dev/null
-docker system prune -a --volumes -f
-------Build lại image--------
-docker compose up -d --build
-------Pull model DeepSeek R1 trong container ollama-------
-docker compose up -d ollama
-docker exec -it ollama ollama pull deepseek-r1
-docker exec -it ollama ollama pull nomic-embed-text
+```bash
+  #Xoa toan bo
+  docker rm -f $(docker ps -aq) 2>/dev/null
+  docker rmi -f $(docker images -aq) 2>/dev/null
+  docker system prune -a --volumes -f
+  #Build lại image
+  docker compose down 
+  docker compose up -d --build
+  #
+  pip3 install -U fastapi uvicorn sentence-transformers torch
+  uvicorn vi_embed_server:app --host 0.0.0.0 --port 8082
+  #Start the Frontend (Locally):
+  cd frontend
+  npm install
+  npm run dev
+  #Test nhanh sau khi compose up
+  # list models from LiteLLM
+  curl -s http://localhost:4000/v1/models -H "Authorization: Bearer mtl" | head
 
-docker compose up -d ollama
-docker compose exec ollama ollama pull deepseek-r1:1.5b
-docker compose exec ollama ollama pull nomic-embed-text
-docker compose exec ollama ollama list
+  # chat test (qwen)
+  curl -s http://localhost:4000/v1/chat/completions \
+    -H "Authorization: Bearer mtl" \
+    -H "Content-Type: application/json" \
+    -d '{"model":"qwen25-7b","messages":[{"role":"user","content":"Trả lời bằng tiếng Việt: bạn là ai?"}]}' | head
+
+  # embedding test (bge-m3)
+  curl -s http://localhost:4000/v1/embeddings \
+    -H "Authorization: Bearer mtl" \
+    -H "Content-Type: application/json" \
+    -d '{"model":"bge-m3","input":"xin chào"}' | head
+
+  # embedding test (vi-embed)
+  curl -s http://localhost:4000/v1/embeddings \
+    -H "Authorization: Bearer mtl" \
+    -H "Content-Type: application/json" \
+    -d '{"model":"vi-embed","input":["xin chào","luật giao thông"]}' | head
+
+  #Pull model DeepSeek R1 trong container ollama
+  docker compose up -d ollama
+  docker exec -it ollama ollama pull deepseek-r1
+  docker exec -it ollama ollama pull nomic-embed-text
+
+  docker compose up -d ollama
+  docker compose exec ollama ollama pull deepseek-r1:1.5b
+  docker compose exec ollama ollama pull nomic-embed-text
+  docker compose exec ollama ollama list
 
 
 
 
-docker compose up -d ollama
-docker exec -it ollama ollama list
-docker exec -it ollama ollama pull deepseek-r1: 1.5b
-docker exec -it ollama ollama pull nomic-embed-text
+  docker compose up -d ollama
+  docker exec -it ollama ollama list
+  docker exec -it ollama ollama pull deepseek-r1: 1.5b
+  docker exec -it ollama ollama pull nomic-embed-text
 
 
-pull model vào Ollama container.
-docker exec -it ollama ollama pull deepseek-r1:1.5b
-docker exec -it ollama ollama pull nomic-embed-text
+  #pull model vào Ollama container.
+  docker exec -it ollama ollama pull deepseek-r1:1.5b
+  docker exec -it ollama ollama pull nomic-embed-text
 
-docker compose down
-docker compose up -d
-docker compose logs -f litellm
+  docker compose down
+  docker compose up -d
+  docker compose logs -f litellm
 
 
-docker restart ollama
-docker exec -it ollama ollama list
+  docker restart ollama
+  docker exec -it ollama ollama list
+```

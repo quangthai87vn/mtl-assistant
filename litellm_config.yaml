@@ -26,7 +26,7 @@ model_list:
       api_key: ollama
    
   # ✅ NEW: Qwen instruct
-  - model_name: qwen2.5-7b-instruct
+  - model_name: qwen25-7b
     litellm_params:
       model: openai/qwen2.5:7b-instruct
       api_base: http://ollama:11434/v1
@@ -39,7 +39,7 @@ model_list:
       api_base: http://ollama:11434/v1
       api_key: ollama
 
-  - model_name: vi-doc-embed
+  - model_name: vi-embed
     litellm_params:
       model: openai/vi-doc-embed
       api_base: http://host.docker.internal:8082/v1

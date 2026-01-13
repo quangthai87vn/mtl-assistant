@@ -102,6 +102,7 @@ services:
     command: ["litellm --config /app/config.yaml --host 0.0.0.0 --port 4000 --drop_params"]
     depends_on:
       - ollama
+      - vi-embed-server
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
@@ -124,8 +125,23 @@ services:
       ollama pull bge-m3
     restart: "no"
 
+  vi-embed-server:
+    build:
+      context: ./vi-embed-server
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - MODEL_ID=dangvantuan/vietnamese-document-embedding
+      - DEVICE=cpu
+      - MAX_BATCH=32
+    volumes:
+      - hf_cache:/root/.cache/huggingface
+    restart: unless-stopped
+
 
 volumes:
   postgres_data:
   ollama_data:
     name: ollama_data
+  hf_cache:
