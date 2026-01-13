@@ -105,8 +105,14 @@ Developed as part of the Traffic Legal Assistant project.
 
 
 ---------------------------
-Pull model DeepSeek R1 trong container ollama
-Chạy:
+
+------Xoa toan bo------
+docker rm -f $(docker ps -aq) 2>/dev/null
+docker rmi -f $(docker images -aq) 2>/dev/null
+docker system prune -a --volumes -f
+------Build lại image--------
+docker compose up -d --build
+------Pull model DeepSeek R1 trong container ollama-------
 docker compose up -d ollama
 docker exec -it ollama ollama pull deepseek-r1
 docker exec -it ollama ollama pull nomic-embed-text

@@ -5,7 +5,7 @@ from backend.config import settings
 
 # Global client cache to avoid pickling issues and redundant connections
 _async_client: Optional[openai.AsyncOpenAI] = None
-
+'''
 def get_openai_client():
     global _async_client
     if _async_client is None:
@@ -14,6 +14,16 @@ def get_openai_client():
             base_url="https://openrouter.ai/api/v1"
         )
     return _async_client
+'''
+def get_openai_client():
+    global _async_client
+    if _async_client is None:
+        _async_client = openai.AsyncOpenAI(
+            api_key=settings.OPENAI_API_KEY,          # master key của litellm
+            base_url=settings.OPENAI_BASE_URL         # http://litellm:4000/v1
+        )
+    return _async_client
+
 
 class QwenEmbeddingFunc:
     def __init__(self):
@@ -145,7 +155,7 @@ async def qwen_vl_parse_pdf(file_path: str) -> str:
     
     client = get_openai_client()
     response = await client.chat.completions.create(
-        model="qwen/qwen3-vl-235b-a22b-instruct",
+        model=settings.LLM_MODEL, #"qwen/qwen3-vl-235b-a22b-instruct",
         messages=messages,
         extra_headers={
             "HTTP-Referer": "https://github.com/traffic/law-assistant",

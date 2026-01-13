@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     REDIS_URL: Optional[str] = None
     
     OPENROUTER_API_KEY: Optional[str] = None
+
+    OPENAI_API_KEY: Optional[str] = None
+    OPENAI_BASE_URL: str = "http://litellm:4000/v1"
     
     EMBEDDING_MODEL: str ="ollama/nomic-embed-text" #"openai/text-embedding-3-small"
     LLM_MODEL: str = "ollama/deepseek-r1:1.5b"#"deepseek/deepseek-v3.2"

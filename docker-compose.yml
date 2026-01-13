@@ -74,7 +74,7 @@ services:
       - EMBEDDING_BINDING_API_KEY=${LITELLM_MASTER_KEY}
      # - EMBEDDING_BINDING_API_KEY=${OPENROUTER_API_KEY}
      # - EMBEDDING_BINDING_HOST=https://openrouter.ai/api/v1
-     # - EMBEDDING_DIM=1536
+      #- EMBEDDING_DIM=1536
       - EMBEDDING_DIM=768
       - EMBEDDING_TIMEOUT=600
       - EMBEDDING_FUNC_MAX_ASYNC=2
@@ -93,8 +93,9 @@ services:
     env_file:
       - .env
     environment:
-      #- GEMINI_API_KEY=${GEMINI_API_KEY}
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/law_assistant
+      - LITELLM_SALT_KEY=mtl-salt-key
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
     entrypoint: ["sh", "-lc"]
@@ -108,6 +109,20 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    restart: unless-stopped
+    
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["sh", "-lc"]
+    command: >
+      sleep 3 &&
+      ollama pull qwen2.5:7b-instruct &&
+      ollama pull bge-m3
+    restart: "no"
 
 
 volumes:
