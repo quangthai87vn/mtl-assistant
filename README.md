@@ -105,7 +105,7 @@ Developed as part of the Traffic Legal Assistant project.
 
 
 ---------------------------
-
+TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
 ------Xoa toan bo------
 docker rm -f $(docker ps -aq) 2>/dev/null
 docker rmi -f $(docker images -aq) 2>/dev/null
