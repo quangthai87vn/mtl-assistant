@@ -48,7 +48,12 @@ MAX_BATCH = int(os.getenv("MAX_BATCH", "64"))
 app = FastAPI(title="Vietnamese Embedding Server", version="1.0.0")
 
 # Load once
-model = SentenceTransformer(MODEL_ID, device=DEVICE)
+
+model = SentenceTransformer(
+    MODEL_ID,
+    device=DEVICE,
+    trust_remote_code=True
+)
 
 
 class EmbeddingsRequest(BaseModel):

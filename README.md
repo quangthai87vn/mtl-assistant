@@ -114,6 +114,11 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
   #Build lại image
   docker compose down 
   docker compose up -d --build
+  #Build + chạy lại docker - Vì code nằm trong image, sửa xong phải build lại:
+  docker compose down
+  docker compose build --no-cache vi-embed-server
+  docker compose up -d
+  docker compose logs -f vi-embed-server
   #
   pip3 install -U fastapi uvicorn sentence-transformers torch
   uvicorn vi_embed_server:app --host 0.0.0.0 --port 8082
@@ -142,6 +147,11 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
     -H "Authorization: Bearer mtl" \
     -H "Content-Type: application/json" \
     -d '{"model":"vi-embed","input":["xin chào","luật giao thông"]}' | head
+  #Cách kiểm tra embedding dim đúng 100%
+  curl -s http://localhost:8082/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -d '{"model":"vi-embed","input":"xin chào"}' \
+| python -c "import sys,json; d=json.load(sys.stdin); print(len(d['data'][0]['embedding']))"
 
   #Pull model DeepSeek R1 trong container ollama
   docker compose up -d ollama
