@@ -114,44 +114,12 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
   #Build lại image
   docker compose down 
   docker compose up -d --build
-  #Build + chạy lại docker - Vì code nằm trong image, sửa xong phải build lại:
-  docker compose down
-  docker compose build --no-cache vi-embed-server
-  docker compose up -d
-  docker compose logs -f vi-embed-server
-  #
-  pip3 install -U fastapi uvicorn sentence-transformers torch
-  uvicorn vi_embed_server:app --host 0.0.0.0 --port 8082
-  #Start the Frontend (Locally):
-  cd frontend
-  npm install
-  npm run dev
-  #Test nhanh sau khi compose up
-  # list models from LiteLLM
-  curl -s http://localhost:4000/v1/models -H "Authorization: Bearer mtl" | head
+  #Build lại image + xoa data
+  docker compose down -v
+  docker compose up -d --build -V
 
-  # chat test (qwen)
-  curl -s http://localhost:4000/v1/chat/completions \
-    -H "Authorization: Bearer mtl" \
-    -H "Content-Type: application/json" \
-    -d '{"model":"qwen25-7b","messages":[{"role":"user","content":"Trả lời bằng tiếng Việt: bạn là ai?"}]}' | head
 
-  # embedding test (bge-m3)
-  curl -s http://localhost:4000/v1/embeddings \
-    -H "Authorization: Bearer mtl" \
-    -H "Content-Type: application/json" \
-    -d '{"model":"bge-m3","input":"xin chào"}' | head
 
-  # embedding test (vi-embed)
-  curl -s http://localhost:4000/v1/embeddings \
-    -H "Authorization: Bearer mtl" \
-    -H "Content-Type: application/json" \
-    -d '{"model":"vi-embed","input":["xin chào","luật giao thông"]}' | head
-  #Cách kiểm tra embedding dim đúng 100%
-  curl -s http://localhost:8082/v1/embeddings \
-  -H "Content-Type: application/json" \
-  -d '{"model":"vi-embed","input":"xin chào"}' \
-| python -c "import sys,json; d=json.load(sys.stdin); print(len(d['data'][0]['embedding']))"
 
   #Pull model DeepSeek R1 trong container ollama
   docker compose up -d ollama
@@ -171,3 +139,14 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
   docker restart ollama
   docker exec -it ollama ollama list
 ```
+
+Hướng A — Muốn GIỮ thay đổi của bạn (an toàn nhất)
+B1. Xem đang bẩn gì
+git status
+B2. Stash lại tất cả (kể cả file untracked như .env)
+git stash -u
+B3. Pull lại
+git pull
+B4. Lấy lại thay đổi của bạn (nếu cần)
+git stash pop
+Nếu stash pop bị conflict (xung đột), Git sẽ báo, bạn mở file lên resolve rồi commit.

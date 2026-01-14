@@ -5,33 +5,26 @@ general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   store_model_in_db: true
   store_prompts_in_spend_logs: true
-  
 
 
 model_list:
   - model_name: deepseek-r1
-    litellm_params:
-      # chạy model deepseek-r1:1.5b trên Ollama qua OpenAI-compatible API
-      #model: qwen2.5:7b-instruct 
+    litellm_params:      
       model: openai/deepseek-r1:1.5b
       api_base: http://ollama:11434/v1
       api_key: ollama
 
   - model_name: ollama-embed
-    litellm_params:
-      # nomic-embed-text output = 768 dims
-      #model: bge-m3 
+    litellm_params:      
       model: openai/nomic-embed-text
-      #api_base: http://ollama:11434/v1
-      api_base: http://host.docker.internal:11434/v1
+      api_base: http://ollama:11434/v1    
       api_key: ollama
    
   # ✅ NEW: Qwen instruct
   - model_name: qwen25-7b
     litellm_params:
       model: openai/qwen2.5:7b-instruct
-      #api_base: http://ollama:11434/v1
-      api_base: http://host.docker.internal:11434/v1
+      api_base: http://ollama:11434/v1     
       api_key: ollama
 
   # ✅ NEW: BGE-M3 embeddings
@@ -44,6 +37,6 @@ model_list:
   - model_name: vi-embed
     litellm_params:
       model: openai/vi-doc-embed
-      #api_base: http://vi-embed-server:8082/v1
-      api_base: http://host.docker.internal:11434/v1
+      api_base: http://vi-embed-server:8002/v1
+      #api_base: http://host.docker.internal:11434/v1
       api_key: dummy

@@ -9,6 +9,8 @@ services:
       - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
 
   backend:
     build:
@@ -36,6 +38,7 @@ services:
       - 'ENTITY_TYPES=["Văn bản pháp luật", "Điều khoản", "Cơ quan ban hành", "Đối tượng áp dụng", "Hành vi vi phạm", "Hình thức xử phạt", "Thời hạn", "Khái niệm pháp lý"]'
     depends_on:
       - db
+    
 
   rag-ui:
     build:
@@ -86,7 +89,9 @@ services:
     depends_on:
       - db
       - litellm
-     
+      - ollama
+    restart: unless-stopped
+
   
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-latest
@@ -103,16 +108,30 @@ services:
     entrypoint: ["sh", "-lc"]
     command: ["litellm --config /app/config.yaml --host 0.0.0.0 --port 4000 --drop_params"]
     depends_on:
+      - ollama
       - vi-embed-server
+    restart: unless-stopped
 
 
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    
 
   vi-embed-server:
     build:
       context: ./vi-embed-server
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
+      - "8002:8002"
     environment:
       - MODEL_ID=dangvantuan/vietnamese-document-embedding
       - DEVICE=cpu
@@ -124,4 +143,6 @@ services:
 
 volumes:
   postgres_data:
+  ollama_data:
+    name: ollama_data
   hf_cache:
