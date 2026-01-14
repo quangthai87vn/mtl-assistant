@@ -155,28 +155,14 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
 
   #Pull model DeepSeek R1 trong container ollama
   docker compose up -d ollama
-  docker exec -it ollama ollama pull deepseek-r1
-  docker exec -it ollama ollama pull nomic-embed-text
-
-  docker compose up -d ollama
   docker compose exec ollama ollama pull deepseek-r1:1.5b
   docker compose exec ollama ollama pull nomic-embed-text
   docker exec -it ollama ollama pull qwen2.5:7b-instruct
+  docker compose exec ollama ollama pull bge-m3   
   docker compose exec ollama ollama list
 
-
-
-
-  docker compose up -d ollama
-  docker exec -it ollama ollama list
-  docker exec -it ollama ollama pull deepseek-r1: 1.5b
-  docker exec -it ollama ollama pull nomic-embed-text
-
-
-  #pull model vào Ollama container.
-  docker exec -it ollama ollama pull deepseek-r1:1.5b
-  docker exec -it ollama ollama pull nomic-embed-text
-
+  
+  #Khong mat Data
   docker compose down
   docker compose up -d
   docker compose logs -f litellm
