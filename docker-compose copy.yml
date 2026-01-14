@@ -86,7 +86,7 @@ services:
     depends_on:
       - db
       - litellm
-     
+      - ollama
   
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-latest
@@ -103,9 +103,29 @@ services:
     entrypoint: ["sh", "-lc"]
     command: ["litellm --config /app/config.yaml --host 0.0.0.0 --port 4000 --drop_params"]
     depends_on:
+      - ollama
       - vi-embed-server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
 
-
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["sh", "-lc"]
+    command: >
+      sleep 3 &&
+      ollama pull qwen2.5:7b-instruct &&
+      ollama pull bge-m3
+    restart: "no"
 
   vi-embed-server:
     build:
@@ -124,4 +144,6 @@ services:
 
 volumes:
   postgres_data:
+  ollama_data:
+    name: ollama_data
   hf_cache:
