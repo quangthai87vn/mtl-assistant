@@ -161,6 +161,7 @@ TÀI LIỆU: https://tutorial.aivietnam.edu.vn/pdf/48
   docker compose up -d ollama
   docker compose exec ollama ollama pull deepseek-r1:1.5b
   docker compose exec ollama ollama pull nomic-embed-text
+  docker exec -it ollama ollama pull qwen2.5:7b-instruct
   docker compose exec ollama ollama list
 
 

@@ -42,5 +42,5 @@ model_list:
   - model_name: vi-embed
     litellm_params:
       model: openai/vi-doc-embed
-      api_base: http://host.docker.internal:8082/v1
+      api_base: http://vi-embed-server:8082/v1
       api_key: dummy
